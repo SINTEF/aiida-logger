@@ -5,11 +5,8 @@ Register calculations via the "aiida.calculations" entry point in setup.json.
 """
 from __future__ import absolute_import
 
-import six
-
 from aiida.common import datastructures
 from aiida.engine import CalcJob
-from aiida.orm import SinglefileData
 from aiida.plugins import DataFactory
 
 
@@ -27,13 +24,21 @@ class LoggerCalculation(CalcJob):
         # yapf: disable
         super(LoggerCalculation, cls).define(spec)
         spec.input('metadata.options.resources', valid_type=dict, default={'num_machines': 1, 'num_mpiprocs_per_machine': 1})
-        spec.input('metadata.options.parser_name', valid_type=six.string_types, default='logger')
+        spec.input('metadata.options.parser_name', valid_type=str, default='logger')
         spec.input('metadata.options.withmpi', valid_type=bool, default=False)
-        spec.input('metadata.options.output_filename', valid_type=Str, default='logger.out')
-        spec.input('parameters', valid_type=Dict, help='Parameters to use for the processing of datafiles.')
-        spec.input_namespace('datafiles', valid_type=SinglefileData, dynamic=True, help='A dictionary of datafiles to be analyzed.')
+        spec.input('metadata.options.output_filename', valid_type=str, default='logger.out')
+        spec.input('parameters', valid_type=DataFactory('dict'), help='Parameters to use for the processing of datafiles.')
+        spec.input_namespace('datafiles', valid_type=DataFactory('singlefile'), dynamic=True, help='A dictionary of datafiles to be analyzed.')
 
-        spec.exit_code(100, 'ERROR_MISSING_DATA_FILE', message='Could not locate the data file.')
+        spec.output('data', valid_type=DataFactory('array'), help='The output data.')
+        spec.output('metadata', valid_type=DataFactory('dict'), help='The output metadata.')
+
+        spec.exit_code(1000, 'ERROR_MISSING_DATA_FILE', message='Could not locate the data file.')
+        spec.exit_code(1001, 'ERROR_READING_DATA_FILE', message='Could not read the data file.')
+        spec.exit_code(1002, 'ERROR_INVALID_DATA_OUTPUT', message='Data format is unknown and could not be parsed.')
+        spec.exit_code(1003, 'ERROR_NO_RETRIEVED_FOLDER', message='Could not obtain the retrieved folder.')
+        spec.exit_code(1004, 'ERROR_MISSING_OUTPUT_FILES', message='Could not locate any of the required output files.')
+
 
     def prepare_for_submission(self, folder):
         """
@@ -51,10 +56,13 @@ class LoggerCalculation(CalcJob):
         # Prepare a `CalcInfo` to be returned to the engine
         calcinfo = datastructures.CalcInfo()
         calcinfo.codes_info = [codeinfo]
-        calcinfo.local_copy_list = []
-        calcinfo.retrieve_list = []
+        local_copy_list = []
+        retrieve_list = []
         # Define which datafiles to analyze
-        for item in self.inputs.filenames.items():
-            calcinfo.retrieve_list.append(item)
+        for item in self.inputs.datafiles.values():
+            local_copy_list.append((item.uuid, item.filename, item.filename))
+            retrieve_list.append(item.filename)
+        calcinfo.local_copy_list = local_copy_list
+        calcinfo.retrieve_list = retrieve_list
 
         return calcinfo

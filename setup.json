@@ -14,26 +14,20 @@
     ],
     "version": "0.1.0",
     "entry_points": {
-        "aiida.data": [
-            "logger = aiida_logger.data:DiffParameters"
-        ],
         "aiida.calculations": [
-            "logger = aiida_logger.calcs.logger:DiffCalculation"
+            "logger = aiida_logger.calculations.logger:LoggerCalculation"
         ],
         "aiida.parsers": [
-            "logger = aiida_logger.parsers.logger:DiffParser"
-        ],
-        "aiida.cmdline.data": [
-            "logger = aiida_logger.commands.cli:data_cli"
-        ]
+            "logger = aiida_logger.parsers.logger:LoggerParser"
+	]
     },
     "include_package_data": true,
     "setup_requires": ["reentry"],
     "reentry_register": true,
     "install_requires": [
         "aiida-core>=1.0.1,<2.0.0",
-        "six",
-        "voluptuous"
+        "voluptuous",
+	"fleep"
     ],
     "extras_require": {
         "testing": [
