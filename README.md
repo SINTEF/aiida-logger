@@ -29,12 +29,6 @@ verdi run example.py        # submit test calculation
 verdi process list -a  # check status of calculation
 ```
 
-The plugin also includes verdi commands to inspect its data types:
-```shell
-verdi data logger list
-verdi data logger export <PK>
-```
-
 ## Development
 
 ```shell
