@@ -18,21 +18,6 @@ env:
 
 matrix:
   include:
-  # python27, develop aiida-core
-  - name: "python-2.7 (django)"
-    python: 2.7
-    env:
-      TEST_TYPE: tests
-  - name: "python-2.7 (sqla)"
-    python: 2.7
-    env:
-      TEST_TYPE: tests
-      AIIDA_TEST_BACKEND: sqlalchemy
-  - name: "python-2.7 (pre-commit)"
-    python: 2.7
-    env:
-      TEST_TYPE: pre-commit
-
   # python36, develop aiida-core
   - name: "python-3.6 (django)"
     python: 3.6
