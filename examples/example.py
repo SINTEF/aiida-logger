@@ -29,6 +29,8 @@ parameters.labels = True
 SinglefileData = DataFactory('singlefile')
 datafile = SinglefileData(
     file=os.path.join(TEST_DIR, 'input_files', 'datafile'))
+xlsfile = SinglefileData(
+    file=os.path.join(TEST_DIR, 'input_files', 'data.xlsx'))
 
 # Set up calculation
 inputs = {

@@ -27,7 +27,9 @@
     "install_requires": [
         "aiida-core>=1.0.1,<2.0.0",
         "voluptuous",
-	"fleep"
+	"fleep",
+	"openpyxl",
+	"defusedxml"
     ],
     "extras_require": {
         "testing": [

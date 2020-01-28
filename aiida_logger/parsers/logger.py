@@ -12,6 +12,7 @@ from aiida.parsers.parser import Parser
 from aiida.plugins import CalculationFactory
 
 from aiida_logger.parsers.file_parsers.datafile import DatafileParser
+from aiida_logger.parsers.file_parsers.spreadsheet import SpreadsheetParser
 
 
 class LoggerParser(Parser):
@@ -68,13 +69,21 @@ class LoggerParser(Parser):
             except (OSError, IOError):
                 return self.exit_codes.ERROR_READING_DATA_FILE
             filetypes[filename] = info
+            data = None
+            metadata = None
             if not info.type and not info.extension and not info.mime:
                 # Call the generic datafile parser as we did not detect any particular
                 # file type
-                datafile_parser = DatafileParser(output_folder,
+                datafile_parser = DatafileParser(output_folder, filename,
                                                  self.exit_codes, parameters)
                 data, metadata = datafile_parser.parse()
-                self.out('data', data)
-                self.out('metadata', metadata)
+            elif info.mime[0] == 'application/vnd.ms-excel':
+                # Call the spreadsheet parser based on
+                spreadsheet_parser = SpreadsheetParser(output_folder, filename,
+                                                       self.exit_codes,
+                                                       parameters)
+                data, metadata = spreadsheet_parser.parse()
+            self.out('data', data)
+            self.out('metadata', metadata)
 
         return ExitCode(0)
