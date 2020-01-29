@@ -57,7 +57,7 @@ def test_process(logger_code):
 
     assert 'labels' in metadata
     assert 'comments' in metadata
-    assert metadata['labels'] == 'time param1 param2 param3'
+    assert metadata['labels'] == ['time', 'param1', 'param2', 'param3']
     assert metadata['comments'][0] == '# This is an example file'
     test_array = np.array([[1.0e+00, 3.0e+00, 4.0e+00, 5.0e+00],
                            [2.0e+00, 4.0e+00, 5.7e+00, -1.0e-01],

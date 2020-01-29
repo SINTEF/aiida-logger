@@ -20,33 +20,6 @@ def test_generic_datafile_parsing(fixture_retrieved):  # noqa: F811
     exit_codes = dummy_calculation.exit_codes
 
     parameters = DataFactory('dict')(dict={
-        'comment_string': '',
-        'labels': True
-    })
-
-    gc_parser = GCParser(fixture_retrieved, 'gc_example.txt', exit_codes,
-                         parameters)
-    data, metadata = gc_parser.parse()
-    metadata = metadata.get_dict()
-
-    assert 'labels' in metadata
-    assert 'comments' in metadata
-    assert metadata['labels'] == ['time', 'param1', 'param2', 'param3']
-    assert metadata['comments'][0] == '# This is an example file'
-    test_array = np.array([[1.0e+00, 3.0e+00, 4.0e+00, 5.0e+00],
-                           [2.0e+00, 4.0e+00, 5.7e+00, -1.0e-01],
-                           [3.0e+00, 1.0e-03, 1.0e+03, 8.0e-01]])
-    np.testing.assert_allclose(data.get_array('content'), test_array)
-
-
-def test_gc_parsing(fixture_retrieved):  # noqa: F811
-    """Test a gas chromatograph file with a comment section, labels, time floats."""
-    from aiida_logger.parsers.file_parsers.gc import GCParser
-
-    dummy_calculation = CalculationFactory('arithmetic.add')
-    exit_codes = dummy_calculation.exit_codes
-
-    parameters = DataFactory('dict')(dict={
         'comment_string': '#',
         'labels': True
     })
@@ -73,7 +46,7 @@ def test_generic_spreadsheet_parsing(fixture_retrieved):  # noqa: F811
     dummy_calculation = CalculationFactory('arithmetic.add')
     exit_codes = dummy_calculation.exit_codes
 
-    config = DataFactory('dict')(dict={
+    parameters = DataFactory('dict')(dict={
         'type': 'spreadsheet',
         'evolution': 'time',
         'time_range': 'A6:A8',
@@ -83,16 +56,12 @@ def test_generic_spreadsheet_parsing(fixture_retrieved):  # noqa: F811
         'manual_label': {
             0: 'Time'
         },
-        'open_end': False
-    })
-
-    parameters = DataFactory('dict')(dict={
+        'open_end': False,
         'comment_string': '#',
         'labels': True
     })
-
     spreadsheet_parser = SpreadsheetParser(fixture_retrieved, 'data_ms.xlsx',
-                                           exit_codes, parameters, config)
+                                           exit_codes, parameters)
     data, metadata = spreadsheet_parser.parse()
     metadata = metadata.get_dict()
 
