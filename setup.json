@@ -29,7 +29,8 @@
         "voluptuous",
 	"fleep",
 	"openpyxl",
-	"defusedxml"
+	"defusedxml",
+	"python-dateutil"
     ],
     "extras_require": {
         "testing": [
