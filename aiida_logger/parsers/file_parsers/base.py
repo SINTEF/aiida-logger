@@ -8,15 +8,14 @@ from aiida_logger.utils.array import string_to_float
 
 class BaseFileParser():
     """Base file parser class."""
-    def __init__(self, folder, filename, exit_codes, parameters, config=None):
+    def __init__(self, folder, filename, exit_codes, parameters=None):
         self.folder = folder
         self.filename = filename
         self.exit_codes = exit_codes
-        self.parameters = parameters.get_dict()
+        self.parameters = None
+        if parameters:
+            self.parameters = parameters.get_dict()
         self.binary = False
-        self.config = None
-        if config:
-            self.config = config.get_dict()
 
     def parse(self):
         """Parse the quantity of interest."""

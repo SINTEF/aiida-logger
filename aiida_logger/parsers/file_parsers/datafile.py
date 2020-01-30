@@ -16,17 +16,26 @@ class DatafileParser(BaseFileParser):
         data_no_comments = []
         comments = []
         labels = None
-        separator = ' '
+
+        try:
+            separator = self.parameters['separator']
+        except KeyError:
+            separator = ' '
+
+        try:
+            comment_string = self.parameters['comment_string']
+        except KeyError:
+            comment_string = '#'
+
         for line in data:
             line = line.strip()
-            if not line.startswith(self.parameters['comment_string']):
+            if not line.startswith(comment_string):
                 data_no_comments.append(line)
             else:
                 comments.append(line)
 
         if self.parameters.get('labels'):
             labels = data_no_comments[0].split(separator)
-
         # Convert to array
         array = string_to_float(data_no_comments[1:], separator)
 
