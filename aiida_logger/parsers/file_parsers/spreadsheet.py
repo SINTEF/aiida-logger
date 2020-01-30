@@ -25,11 +25,11 @@ class SpreadsheetParser(BaseFileParser):
         metadata = None
         # Locate what data configuration and extract
         if self.parameters['evolution'] == 'time':
-            data, metadata = self._parse_time(wb)
+            result = self._parse_time(wb)
         else:
             raise NotImplemented
 
-        return data, metadata
+        return result
 
     def _parse_time(self, wb):
         """Parse the content which is indexed by time."""
@@ -71,8 +71,9 @@ class SpreadsheetParser(BaseFileParser):
         data = DataFactory('array')()
         data.set_array('content', time_data)
         metadata = DataFactory('dict')(dict={
+            'start_time': reference_time.utcnow(),
             'comments': comments,
             'labels': labels
         })
 
-        return data, metadata
+        return {'data': data, 'metadata': metadata}

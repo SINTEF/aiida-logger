@@ -24,10 +24,11 @@ def test_generic_datafile_parsing(fixture_retrieved):  # noqa: F811
         'labels': True
     })
 
-    datafile_parser = DatafileParser(fixture_retrieved, 'datafile.txt',
+    datafile_parser = DatafileParser(fixture_retrieved, 'datafile',
                                      exit_codes, parameters)
-    data, metadata = datafile_parser.parse()
-    metadata = metadata.get_dict()
+    result = datafile_parser.parse()
+    data = result['data']
+    metadata = result['metadata'].get_dict()
 
     assert 'labels' in metadata
     assert 'comments' in metadata
@@ -57,17 +58,17 @@ def test_generic_spreadsheet_parsing(fixture_retrieved):  # noqa: F811
             0: 'Time'
         },
         'open_end': False,
-        'comment_string': '#',
-        'labels': True
     })
 
     spreadsheet_parser = SpreadsheetParser(fixture_retrieved, 'data_ms.xlsx',
                                            exit_codes, parameters)
-    data, metadata = spreadsheet_parser.parse()
-    metadata = metadata.get_dict()
+    result = spreadsheet_parser.parse()
+    data = result['data']
+    metadata = result['metadata'].get_dict()
 
     assert 'labels' in metadata
     assert 'comments' in metadata
+    assert 'start_time' in metadata
     assert metadata['labels'] == [
         'Time', 'Sensor 1', 'Sensor 2', 'Sensor 3', 'Sensor 4', 'Sensor 5',
         'Sensor 6', 'Sensor 7', 'Sensor 8', 'Sensor 9', 'Sensor 10',
@@ -136,23 +137,62 @@ def test_generic_gc_parsing(fixture_retrieved):  # noqa: F811
         'label_range': '1',
         'time_format': '%m/%d/%y %H:%M:%S',
         'channels': 2,
-        'num_fields_per_channel': 14,
+        'num_fields_per_channel': [14,6],
+        'time_field_index': 0,
         'separator': '\t',
-        'comment_string': '#',
-        'labels': True
     })
 
     gc_parser = GCParser(fixture_retrieved, 'gc_example.txt', exit_codes,
                          parameters)
-    data, metadata = gc_parser.parse()
-    metadata = metadata.get_dict()
+    result = gc_parser.parse()
+    data = result['data']
+    metadata = result['metadata'].get_dict()
 
+    assert 'start_time' in metadata
     assert 'labels' in metadata
     assert 'comments' in metadata
-    assert False
-    #assert metadata['labels'] == ['time', 'param1', 'param2', 'param3']
-    #assert metadata['comments'][0] == '# This is an example file'
-    #test_array = np.array([[1.0e+00, 3.0e+00, 4.0e+00, 5.0e+00],
-    #                       [2.0e+00, 4.0e+00, 5.7e+00, -1.0e-01],
-    #                       [3.0e+00, 1.0e-03, 1.0e+03, 8.0e-01]])
-    #np.testing.assert_allclose(data.get_array('content'), test_array)
+    assert metadata['labels'] == [['Acquisition Date', 'Sample ID', 'ESTD Concentration', 'ESTD Concentration', 'ESTD Concentration', 'ESTD Concentration', 'ESTD Concentration', 'ESTD Concentration', '', 'Area', 'Area', 'Area', 'Area', 'Area', 'Area'], ['Acquisition Date', 'Sample ID', 'ESTD Concentration', 'ESTD Concentration', '', 'Area', 'Area']]
+    test_array = np.array([[0.00000000e+00, 6.79400000e-01, 5.04992000e+01, 1.36000000e-02,
+                   1.27000000e-02, 7.92900000e-01, 4.31270000e+00, 0.00000000e+00,
+                   8.61157000e+05, 8.96377480e+07, 2.34600000e+03, 3.81400000e+03,
+                   4.41225000e+05, 8.86470000e+05],
+                  [0.00000000e+00, 3.48000000e-02, 6.88570000e+00, 6.76100000e-01,
+                   0.00000000e+00, 3.79000000e-02, 0.00000000e+00, 0.00000000e+00,
+                   4.42050000e+04, 1.22223080e+07, 1.16494000e+05, 0.00000000e+00,
+                   2.11070000e+04, 0.00000000e+00],
+                  [0.00000000e+00, 9.56900000e-01, 6.11289000e+01, 0.00000000e+00,
+                   0.00000000e+00, 1.64040000e+00, 8.09260000e+00, 0.00000000e+00,
+                   1.21295000e+06, 1.08505819e+08, 0.00000000e+00, 0.00000000e+00,
+                   9.12864000e+05, 1.66342600e+06],
+                  [0.00000000e+00, 4.32000000e-02, 7.24410000e+00, 6.84600000e-01,
+                   0.00000000e+00, 5.93000000e-02, 2.50000000e-03, 0.00000000e+00,
+                   5.48310000e+04, 1.28584960e+07, 1.17953000e+05, 0.00000000e+00,
+                   3.30150000e+04, 5.14000000e+02],
+                  [0.00000000e+00, 9.86400000e-01, 6.14073000e+01, 1.04000000e-01,
+                   0.00000000e+00, 1.85040000e+00, 7.88030000e+00, 0.00000000e+00,
+                   1.25032800e+06, 1.09000015e+08, 1.79270000e+04, 0.00000000e+00,
+                   1.02969900e+06, 1.61979900e+06],
+                  [0.00000000e+00, 4.56000000e-02, 7.22490000e+00, 0.00000000e+00,
+                   0.00000000e+00, 6.70000000e-02, 3.25000000e-02, 0.00000000e+00,
+                   5.78050000e+04, 1.28244070e+07, 0.00000000e+00, 0.00000000e+00,
+                   3.72850000e+04, 6.67500000e+03],
+                  [0.00000000e+00, 9.89700000e-01, 6.10085000e+01, 0.00000000e+00,
+                   0.00000000e+00, 2.31780000e+00, 7.71760000e+00, 0.00000000e+00,
+                   1.25453200e+06, 1.08292087e+08, 0.00000000e+00, 0.00000000e+00,
+                   1.28981500e+06, 1.58635400e+06]])
+    np.testing.assert_allclose(data.get_array('channel_1'), test_array)
+    test_array = np.array([[0.000000e+00, 5.635900e+00, 2.672400e+00, 0.000000e+00, 2.956906e+06,
+                            5.135330e+05],
+                           [0.000000e+00, 5.400000e-02, 1.536100e+00, 0.000000e+00, 2.834000e+04,
+                            2.951810e+05],
+                           [0.000000e+00, 5.647100e+00, 2.900900e+00, 0.000000e+00, 2.962776e+06,
+                            5.574380e+05],
+                           [0.000000e+00, 6.130000e-02, 1.528800e+00, 0.000000e+00, 3.216600e+04,
+                            2.937810e+05],
+                           [0.000000e+00, 5.631200e+00, 2.886800e+00, 0.000000e+00, 2.954457e+06,
+                            5.547210e+05],
+                           [0.000000e+00, 6.460000e-02, 1.518600e+00, 0.000000e+00, 3.390600e+04,
+                            2.918070e+05],
+                           [0.000000e+00, 5.746800e+00, 2.891000e+00, 0.000000e+00, 3.015136e+06,
+                            5.555380e+05]])
+    np.testing.assert_allclose(data.get_array('channel_2'), test_array)

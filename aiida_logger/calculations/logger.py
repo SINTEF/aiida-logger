@@ -33,9 +33,9 @@ class LoggerCalculation(CalcJob):
         spec.output('data', valid_type=DataFactory('array'), help='The output data.')
         spec.output('metadata', valid_type=DataFactory('dict'), help='The output metadata.')
 
-        spec.exit_code(1000, 'ERROR_MISSING_DATA_FILE', message='Could not locate the data file.')
-        spec.exit_code(1001, 'ERROR_READING_DATA_FILE', message='Could not read the data file.')
-        spec.exit_code(1002, 'ERROR_INVALID_DATA_OUTPUT', message='Data format is unknown and could not be parsed.')
+        spec.exit_code(1000, 'ERROR_MISSING_OUTPUT_FILE', message='Could not locate the output file.')
+        spec.exit_code(1001, 'ERROR_READING_OUTPUT_FILE', message='Could not read the output file.')
+        spec.exit_code(1002, 'ERROR_INVALID_CONTENT_IN_OUTPUT_FILE', message='Data format is unknown and could not be parsed.')
         spec.exit_code(1003, 'ERROR_NO_RETRIEVED_FOLDER', message='Could not obtain the retrieved folder.')
         spec.exit_code(1004, 'ERROR_MISSING_OUTPUT_FILES', message='Could not locate any of the required output files.')
 

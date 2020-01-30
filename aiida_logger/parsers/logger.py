@@ -67,7 +67,7 @@ class LoggerParser(Parser):
                 with output_folder.open(filename, 'rb') as handle:
                     info = fleep.get(handle.read(128))
             except (OSError, IOError):
-                return self.exit_codes.ERROR_READING_DATA_FILE
+                return self.exit_codes.ERROR_READING_OUTPUT_FILE
             filetypes[filename] = info
             data = None
             metadata = None
@@ -76,14 +76,19 @@ class LoggerParser(Parser):
                 # file type
                 datafile_parser = DatafileParser(output_folder, filename,
                                                  self.exit_codes, parameters)
-                data, metadata = datafile_parser.parse()
+                result = datafile_parser.parse()
             elif info.mime[0] == 'application/vnd.ms-excel':
                 # Call the spreadsheet parser based on
                 spreadsheet_parser = SpreadsheetParser(output_folder, filename,
                                                        self.exit_codes,
                                                        parameters)
-                data, metadata = spreadsheet_parser.parse()
-            self.out('data', data)
-            self.out('metadata', metadata)
+                result = spreadsheet_parser.parse()
+
+            if isinstance(result, dict):
+                self.out('data', result['data'])
+                self.out('metadata', result['metadata'])
+            else:
+                # Assume we have an exit code
+                return result
 
         return ExitCode(0)

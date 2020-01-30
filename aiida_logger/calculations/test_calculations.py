@@ -43,9 +43,6 @@ def test_process(logger_code):
         },
     }
 
-    # Note: in order to submit your calculation to the aiida daemon, do:
-    # from aiida.engine import submit
-    # future = submit(CalculationFactory('logger'), **inputs)
     result = run(CalculationFactory('logger'), **inputs)
 
     assert 'data' in result

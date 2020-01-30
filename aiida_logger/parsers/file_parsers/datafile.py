@@ -47,4 +47,4 @@ class DatafileParser(BaseFileParser):
             'labels': labels
         })
 
-        return data, metadata
+        return {'data': data, 'metadata': metadata}
