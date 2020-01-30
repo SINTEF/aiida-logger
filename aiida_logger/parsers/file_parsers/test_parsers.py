@@ -132,13 +132,28 @@ def test_generic_gc_parsing(fixture_retrieved):  # noqa: F811
 
     parameters = DataFactory('dict')(dict={
         'type': 'gc',
-        'evolution': 'time',
-        'comment_range': '0',
-        'label_range': '1',
-        'time_format': '%m/%d/%y %H:%M:%S',
-        'channels': 2,
-        'num_fields_per_channel': [14,6],
-        'time_field_index': 0,
+        'comment_line': 0,
+        'data_start_line': 2,
+        'data_layout': [[{'time': '%m/%d/%y %H:%M:%S'},
+                         {'id': int},
+                         {'He concentration': float},
+                         {'H2 concentration': float},
+                         {'O2 concentration': float},
+                         {'N2 concentration': float},
+                         {'CH4 concentration': float},
+                         {'CO concentration': float},
+                         {'He area': float},
+                         {'H2 area': float},
+                         {'O2 area': float},
+                         {'N2 area': float},
+                         {'CH4 area': float},
+                         {'CO area': float}],
+                        [{'time': '%m/%d/%y %H:%M:%S'},
+                         {'id': int},
+                         {'CO2 concentration': float},
+                         {'H2O concentration': float},
+                         {'CO2 area': float},
+                         {'H2O area': float}]],
         'separator': '\t',
     })
 
@@ -151,7 +166,7 @@ def test_generic_gc_parsing(fixture_retrieved):  # noqa: F811
     assert 'start_time' in metadata
     assert 'labels' in metadata
     assert 'comments' in metadata
-    assert metadata['labels'] == [['Acquisition Date', 'Sample ID', 'ESTD Concentration', 'ESTD Concentration', 'ESTD Concentration', 'ESTD Concentration', 'ESTD Concentration', 'ESTD Concentration', '', 'Area', 'Area', 'Area', 'Area', 'Area', 'Area'], ['Acquisition Date', 'Sample ID', 'ESTD Concentration', 'ESTD Concentration', '', 'Area', 'Area']]
+    assert metadata['labels'] == [['time', 'id', 'He concentration', 'H2 concentration', 'O2 concentration', 'N2 concentration', 'CH4 concentration', 'CO concentration', 'He area', 'H2 area', 'O2 area', 'N2 area', 'CH4 area', 'CO area'], ['time', 'id', 'CO2 concentration', 'H2O concentration', 'CO2 area', 'H2O area']]
     test_array = np.array([[0.00000000e+00, 6.79400000e-01, 5.04992000e+01, 1.36000000e-02,
                    1.27000000e-02, 7.92900000e-01, 4.31270000e+00, 0.00000000e+00,
                    8.61157000e+05, 8.96377480e+07, 2.34600000e+03, 3.81400000e+03,
