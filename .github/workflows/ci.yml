@@ -59,7 +59,7 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install --upgrade pip
-        pip install -e .[docs, testing]
+        pip install -e .[docs,testing]
         reentry scan -r aiida
     - name: Build docs
       run: cd docs && make
