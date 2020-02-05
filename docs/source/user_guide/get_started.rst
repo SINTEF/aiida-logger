@@ -39,4 +39,4 @@ Available calculations
 ++++++++++++++++++++++
 
 .. aiida-calcjob:: LoggerCalculation
-    :module: aiida_logger.calculations
+    :module: aiida_logger.calculations.logger

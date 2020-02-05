@@ -5,7 +5,7 @@
 The aiida-logger plugin for `AiiDA`_
 =====================================================
 
-``aiida-logger`` is available at http://github.com/espenfl/aiida-logger
+``aiida-logger`` is available at http://github.com/sintef/aiida-logger
 
 
 .. toctree::
@@ -14,10 +14,6 @@ The aiida-logger plugin for `AiiDA`_
    user_guide/index
    developer_guide/index
    API documentation <apidoc/aiida_logger>
-
-If you use this plugin for your research, please cite the following work:
-
-.. highlights:: Author Name1, Author Name2, *Paper title*, Jornal Name XXX, YYYY (Year).
 
 If you use AiiDA for your research, please cite the following work:
 
