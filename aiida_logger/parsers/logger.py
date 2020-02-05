@@ -52,6 +52,7 @@ class LoggerParser(Parser):
         files_retrieved = output_folder.list_object_names()
         inputs = self.node.get_incoming(link_type=LinkType.INPUT_CALC).nested()
         files_expected = inputs['datafiles']
+        files_expected = [item.filename for item in files_expected.values()]
         # Note: set(A) <= set(B) checks whether A is a subset of B
         if not set(files_expected) <= set(files_retrieved):
             self.logger.error("Found files '{}', expected to find '{}'".format(
@@ -83,7 +84,6 @@ class LoggerParser(Parser):
                                                        self.exit_codes,
                                                        parameters)
                 result = spreadsheet_parser.parse()
-
             if isinstance(result, dict):
                 self.out('data', result['data'])
                 self.out('metadata', result['metadata'])

@@ -13,7 +13,6 @@ class BaseFileParser():
         self.folder = folder
         self.filename = filename
         self.exit_codes = exit_codes
-        print(exit_codes)
         self.parameters = None
         if parameters:
             self.parameters = parameters.get_dict()

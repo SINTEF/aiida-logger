@@ -23,11 +23,14 @@ class LoggerCalculation(CalcJob):
         """Define inputs and outputs of the calculation."""
         # yapf: disable
         super(LoggerCalculation, cls).define(spec)
-        spec.input('metadata.options.resources', valid_type=dict, default={'num_machines': 1, 'num_mpiprocs_per_machine': 1})
-        spec.input('metadata.options.parser_name', valid_type=str, default='logger')
-        spec.input('metadata.options.withmpi', valid_type=bool, default=False)
-        spec.input('metadata.options.output_filename', valid_type=str, default='logger.out')
         spec.input('parameters', valid_type=DataFactory('dict'), help='Parameters to use for the processing of datafiles.')
+        spec.input('verbose',
+                   valid_type=DataFactory('bool'),
+                   required=False,
+                   default=DataFactory('bool')(False),
+                   help="""
+                   If True, enable more detailed output during workchain execution.
+                   """)
         spec.input_namespace('datafiles', valid_type=DataFactory('singlefile'), dynamic=True, help='A dictionary of datafiles to be analyzed.')
 
         spec.output('data', valid_type=DataFactory('array'), help='The output data.')
