@@ -52,8 +52,8 @@
         "docs": [
             "sphinx",
             "sphinxcontrib-contentui",
-            "sphinxcontrib-details-directive; python_version>='3.0'",
-            "sphinx-rtd-theme"
+            "sphinxcontrib-details-directive",
+	    "sphinx-rtd-theme"
         ]
     }
 }

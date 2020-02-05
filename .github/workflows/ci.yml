@@ -51,18 +51,6 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    steps:
-    - uses: actions/checkout@v1
-    - uses: harmon758/postgresql-action@v1
-      with:
-        postgresql version: '11'
-        postgresql db: test_${{ matrix.backend }}
-        postgresql user: 'postgres'
-        postgresql password: ''
-    - name: Install system dependencies
-      run: |
-        sudo apt update
-        sudo apt install postgresql postgresql-server-dev-all postgresql-client
     - name: Set up Python 3.7
       uses: actions/setup-python@v1
       with:
@@ -70,8 +58,7 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install --upgrade pip
-        pip install -e .[docs]
-        pip install pytest
+        pip install -e .[docs, testing]
         reentry scan -r aiida
     - name: Build docs
       run: cd docs && make
