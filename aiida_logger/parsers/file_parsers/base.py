@@ -1,12 +1,9 @@
 from __future__ import absolute_import
 
 from __future__ import print_function
-from os import path
-
-from aiida.plugins import DataFactory
-from aiida_logger.utils.array import string_to_float
 
 
+# pylint: disable=assignment-from-no-return
 class BaseFileParser():
     """Base file parser class."""
     def __init__(self, folder, filename, exit_codes, parameters=None):
@@ -34,7 +31,7 @@ class BaseFileParser():
 
         return result
 
-    def _parse(self):
+    def _parse(self, file_handle):
         """The function that takes care of the actual parsing."""
 
-        raise NotImplemented
+        raise NotImplementedError

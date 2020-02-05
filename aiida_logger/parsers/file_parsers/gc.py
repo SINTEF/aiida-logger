@@ -6,16 +6,15 @@ from dateutil import parser
 import numpy as np
 
 from aiida_logger.parsers.file_parsers.base import BaseFileParser
-from aiida_logger.utils.array import string_to_float
 from six.moves import range
 
 
-class GCParser(BaseFileParser):
+class GCParser(BaseFileParser):  # pylint: disable=too-many-locals
     """Parser class for parsing data from gas chromatographs."""
     def __init__(self, *args, **kwargs):
         super(GCParser, self).__init__(*args, **kwargs)
 
-    def _parse(self, file_handle):
+    def _parse(self, file_handle):  # pylint: disable=too-many-locals
         """Parse the content of GC file as a NumPy array."""
 
         # Set the separator
@@ -29,10 +28,6 @@ class GCParser(BaseFileParser):
             comment_range = self.parameters['comment_range']
         except KeyError:
             comment_range = None
-        try:
-            label_range = self.parameters['label_range']
-        except KeyError:
-            label_range = None
 
         # Read content
         content = file_handle.readlines()
@@ -51,7 +46,7 @@ class GCParser(BaseFileParser):
                 comments = content[int(self.parameters['comment_range'])]
                 shift_index = shift_index + 1
             else:
-                raise NotImplemented
+                raise NotImplementedError
 
         date_time = []
         labels = []
@@ -76,9 +71,8 @@ class GCParser(BaseFileParser):
             raise ValueError(
                 'More than one time entry per channel. Please correct the configuration.'
             )
-        else:
-            # Make sure we only have integers in the list (find a more clever way to do this)
-            time_index = [item[0] for item in time_index]
+        # Make sure we only have integers in the list (find a more clever way to do this)
+        time_index = [item[0] for item in time_index]
 
         # Start extracting the actual data
         for line in content[self.parameters['data_start_line']:]:

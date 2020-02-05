@@ -1,12 +1,9 @@
 from __future__ import absolute_import
 
-from os import path
 import numpy as np
-import json
 
 from aiida.plugins import DataFactory
 from aiida_logger.parsers.file_parsers.base import BaseFileParser
-from aiida_logger.utils.array import string_to_float
 
 
 class SpreadsheetParser(BaseFileParser):
@@ -21,13 +18,11 @@ class SpreadsheetParser(BaseFileParser):
         from openpyxl import load_workbook
         # Load the spreadsheet using openpyxl
         wb = load_workbook(file_handle)
-        data = None
-        metadata = None
         # Locate what data configuration and extract
         if self.parameters['evolution'] == 'time':
             result = self._parse_time(wb)
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
         return result
 

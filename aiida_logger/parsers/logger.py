@@ -70,8 +70,6 @@ class LoggerParser(Parser):
             except (OSError, IOError):
                 return self.exit_codes.ERROR_READING_OUTPUT_FILE
             filetypes[filename] = info
-            data = None
-            metadata = None
             if not info.type and not info.extension and not info.mime:
                 # Call the generic datafile parser as we did not detect any particular
                 # file type
