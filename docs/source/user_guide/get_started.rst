@@ -38,5 +38,5 @@ If you have already set up your own aiida_logger code using
 Available calculations
 ++++++++++++++++++++++
 
-.. aiida-calcjob:: DiffCalculation
+.. aiida-calcjob:: LoggerCalculation
     :module: aiida_logger.calculations
