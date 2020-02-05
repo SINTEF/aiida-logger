@@ -39,6 +39,15 @@ def test_process(logger_code):
             'datafile': datafile
         },
         'metadata': {
+            'options': {
+                'resources': {
+                    'num_machines': 1,
+                    'num_mpiprocs_per_machine': 1
+                },
+                'parser_name': 'logger',
+                'withmpi': False,
+                'output_filename': 'logger.out'
+            },
             'description': 'Test job submission with the aiida_logger plugin'
         },
     }

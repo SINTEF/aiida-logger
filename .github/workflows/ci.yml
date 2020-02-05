@@ -61,6 +61,7 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -e .[docs]
+        pip install pytest
         reentry scan -r aiida
     - name: Build docs
       run: cd docs && make
